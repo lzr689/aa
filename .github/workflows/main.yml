@@ -1,0 +1,71 @@
+Skip to content
+Search or jump to…
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@lzr689 
+mx730129
+/
+auto-workflow-JD.com-jdcoin
+Public
+Code
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+auto-workflow-JD.com-jdcoin/.github/workflows/repo-sync.yml
+@LuzMasonj
+LuzMasonj 调整同步时间次数
+…
+Latest commit ea9fafe on 10 Dec 2020
+ History
+ 3 contributors
+@LuzMasonj@happy-day-by-day@Choicc
+29 lines (28 sloc)  898 Bytes
+   
+# File: .github/workflows/repo-sync.yml
+name: sync-sazs34-scripts
+on:
+  schedule:
+    - cron: '5 0,7,15 * * *'
+  workflow_dispatch:
+  watch:
+    types: started
+  repository_dispatch:
+    types: sync-sazs34-scripts
+jobs:
+  repo-sync:
+    env:
+      PAT: ${{ secrets.PAT || github.event.client_payload.PAT }} #此处PAT需要申请，教程详见：https://www.jianshu.com/p/bb82b3ad1d11
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: sync sazs34-scripts
+        uses: repo-sync/github-sync@v2
+        if: env.PAT
+        with:
+          source_repo: "https://github.com/sazs34/MyActions.git"
+          source_branch: "master"
+          destination_branch: "main"
+          github_token: ${{ secrets.PAT || github.event.client_payload.PAT }}
+© 2022 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+Loading complete
